@@ -1,0 +1,182 @@
+@keyframes main-hover-animation{
+    from{box-shadow: 6px 6px 12px #00000020;}
+    to{box-shadow: 10px 10px 12px #00000050;}
+}
+
+@keyframes input-hover-animation{
+    from{border-bottom: 2px solid #d4d4d4;}
+    to{border-bottom: 2px solid #c003b7;}
+}
+
+@media all {
+    html, body{
+        height: 100%;
+        min-height: 600px;
+        min-width: 450px;
+    }
+
+    body{
+        background: linear-gradient(60deg, #00d9ff, #ff0dde) no-repeat;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+    }
+
+    /* =============================================================================== */
+    /*                                   main                                          */
+    /* =============================================================================== */
+    #main {
+        background: #fff;
+        box-shadow: 6px 6px 12px #00000020;
+        border-radius: 15px;
+
+        width: 80%;
+        height: 80%;
+        min-height: 500px;
+        max-width: 1100px;
+        max-height: 600px;
+
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    #main:hover{
+        animation:  main-hover-animation 0.5s;
+        -webkit-animation:  main-hover-animation 0.5s;
+        box-shadow: 10px 10px 12px #00000040;
+    }
+
+    /* =============================================================================== */
+    /*                                   login                                         */
+    /* =============================================================================== */
+    #login{
+        flex: 3;
+        min-width: 350px;
+
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* =============================================================================== */
+    /*                                   title                                         */
+    /* =============================================================================== */
+    #title{
+        width: 100%;
+
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border-bottom: 1px solid #d4d4d4;
+    }
+
+    /* =============================================================================== */
+    /*                                login form                                       */
+    /* =============================================================================== */
+    #login-form{
+        width: 90%;
+        box-sizing: border-box;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+
+        flex: 4;
+    }
+
+    #login-form-username, #login-form-password{
+        font-size: 16px;
+        margin-top: 20px;
+    }
+
+    #login-form-username-input, 
+    #login-form-password-input{
+        border: none;
+        border-bottom: 2px solid #d4d4d4;
+        height: 48px;
+        width: 90%;
+        color: #1a1a1a;
+        font-weight: bolder;
+        line-height: 24px;
+
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    #login-form-username-input:hover,
+    #login-form-username-input:focus, 
+    #login-form-password-input:hover,
+    #login-form-password-input:focus{
+        text-decoration: none;
+        outline: none;
+
+        border-bottom: 2px solid #c003b7;
+        animation: input-hover-animation 0.5s;
+    }
+
+    #login-action{
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+    }
+
+    /* =============================================================================== */
+    /*                                   sider                                         */
+    /* =============================================================================== */
+    #sider{
+        flex: 5;
+        height: 100%;
+        background-image: url('https://i.loli.net/2019/11/20/7QE5RDXkguGnvaj.jpg');
+        background-size: cover;
+        background-attachment: local;
+    }
+}
+
+@media all and (max-width: 800px) {
+    /* =============================================================================== */
+    /*                                   main                                          */
+    /* =============================================================================== */
+    #main{
+        
+    }
+
+    /* =============================================================================== */
+    /*                                   login                                         */
+    /* =============================================================================== */
+    #login{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        /* =============================================================================== */
+    /*                                   title                                         */
+    /* =============================================================================== */
+    #title{
+        
+    }
+
+    /* =============================================================================== */
+    /*                                login form                                       */
+    /* =============================================================================== */
+    #login-form{
+        flex: 8;
+    }
+
+    /* =============================================================================== */
+    /*                                   sider                                         */
+    /* =============================================================================== */
+    #sider{
+        display: none;
+    }
+}
+
