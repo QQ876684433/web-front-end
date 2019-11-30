@@ -123,8 +123,8 @@
         margin-top: 20px;
     }
 
-    #login-form-username-input, 
-    #login-form-password-input{
+    .login-form-username-input,
+    .login-form-password-input{
         border: none;
         border-bottom: 2px solid #d4d4d4;
         height: 48px;
@@ -137,10 +137,10 @@
         padding-right: 10px;
     }
 
-    #login-form-username-input:hover,
-    #login-form-username-input:focus, 
-    #login-form-password-input:hover,
-    #login-form-password-input:focus{
+    .login-form-username-input:hover,
+    .login-form-username-input:focus,
+    .login-form-password-input:hover,
+    .login-form-password-input:focus{
         text-decoration: none;
         outline: none;
 
@@ -222,7 +222,7 @@
     /*                                   main                                          */
     /* =============================================================================== */
     /* #main{
-        
+
     } */
 
     /* =============================================================================== */
@@ -239,7 +239,7 @@
     /*                                   title                                         */
     /* =============================================================================== */
     /* #title{
-        
+
     } */
 
     /* =============================================================================== */
