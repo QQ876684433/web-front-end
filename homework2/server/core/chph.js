@@ -1,7 +1,7 @@
 import * as http from "http";
 import * as url from "url";
 import * as path from "path";
-import {handleStatic} from "./mime";
+import { handleStatic } from "./mime";
 
 const app = {};
 app.routes = [];
@@ -64,7 +64,7 @@ let _static = 'static';
 app.setStatic = path => {
     _static = path;
 };
-app.listen = (port, host) => {
+app.listen = (port, host, callbacks = []) => {
     http.createServer(((req, res) => {
         const method = req.method.toLowerCase();
         const urlObj = url.parse(req.url, true);
@@ -80,6 +80,9 @@ app.listen = (port, host) => {
         console.log(`Server now running on http://${host}:${port}/\n`);
         process.stdin.resume();
         process.on('SIGINT', () => {
+            for (let callback of callbacks) {
+                callback();
+            }
             console.log('\n');
             console.log('Server shutdown!\n');
             process.exit(2);
