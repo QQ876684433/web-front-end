@@ -148,7 +148,7 @@
         animation: input-hover-animation 0.5s;
     }
 
-    #login-action{
+    #register-action{
         width: 100%;
         box-sizing: border-box;
         padding: 10px;
@@ -170,14 +170,14 @@
         text-decoration: none;
     }
 
-    #login-action:hover{
+    #register-action:hover{
         animation:  login-button-hover-fadein 0.5s;
         -webkit-animation:  login-button-hover-fadein 0.5s;
         box-shadow: 5px 5px 12px #00000050;
     }
 
-    #login-action:hover,
-    #login-action:active{
+    #register-action:hover,
+    #register-action:active{
         outline: none;
         text-decoration: none;
 

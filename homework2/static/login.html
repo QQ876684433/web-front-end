@@ -3,42 +3,44 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
     <link type="text/css" rel="stylesheet" href="css/login.css">
-    <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon"/>
     <title>Sign In</title>
 </head>
 
 <body>
-    <div id="main">
-        <div id="login">
-            <div id="title">
-                <h1>Sign In</h1>
-            </div>
-            <div id="login-form">
-                <div id="login-form-username">
-                    Username
-                </div>
-                <input class="login-form-username-input" type="text" placeholder="please enter your username"/>
-                <div id="login-form-password">
-                    <p>Password</p>
-                    <p id="forget-password">forget password?</p>
-                </div>
-                <input class="login-form-username-input" type="password" placeholder="please enter your password"/>
-                <a href="index">
-                    <button id="login-action">
-                        Sign In
-                    </button>
-                </a>
-                <div id="register">
-                    <a href="register">Go To Sign Up</a>
-                </div>
-            </div>
+<div id="main">
+    <div id="login">
+        <div id="title">
+            <h1>Sign In</h1>
         </div>
-        <div id="sider">
+        <div id="login-form">
+            <div id="login-form-username">
+                Username
+            </div>
+            <input id="input-username" class="login-form-username-input" type="text"
+                   placeholder="please enter your username"/>
+            <div id="login-form-password">
+                <p>Password</p>
+                <p id="forget-password">forget password?</p>
+            </div>
+            <input id="input-password" class="login-form-username-input" type="password"
+                   placeholder="please enter your password"/>
+            <button id="login-action">
+                Sign In
+            </button>
+            <div id="register">
+                <a href="register">Go To Sign Up</a>
+            </div>
         </div>
     </div>
+    <div id="sider">
+    </div>
+</div>
+<script type="text/javascript" src="js/login.js"></script>
 </body>
 
 </html>

@@ -28,6 +28,22 @@ const queryString = (req, res, next) => {
     next();
 };
 
+const postBody = (req, res, next) => {
+    if (req.method.toLowerCase() === 'post') {
+        let content = "";
+        req.on('data', function (chunk) {
+            content += chunk;
+        });
+        req.on('end', () => {
+            req.body = content;
+            next();
+        });
+    } else {
+        req.body = '{}';
+        next();
+    }
+};
+
 const auth = (req, res, next) => {
     if (!req.session.auth) {
         // 尚未登录
@@ -38,4 +54,4 @@ const auth = (req, res, next) => {
     }
 };
 
-export {logger, parseCookie, queryString, auth};
+export {logger, parseCookie, queryString, postBody, auth};
