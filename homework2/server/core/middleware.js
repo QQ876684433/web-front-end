@@ -1,5 +1,6 @@
 import {getTimestamp} from "./util";
 import url from 'url';
+import {redirectToLogin} from "../controller/Redirect";
 
 const logger = (req, res, next) => {
     console.log(`[LOG] ${getTimestamp()} : ${req.url}`);
@@ -15,8 +16,10 @@ const parseCookie = (req, res, next) => {
             const pair = list[i].split('=');
             cookies[pair[0].trim()] = pair[1];
         }
-        req.cookie = cookies;
     }
+    req.cookies = cookies;
+    console.log("[cookie]");
+    console.log(cookies);
     next();
 };
 
@@ -25,4 +28,14 @@ const queryString = (req, res, next) => {
     next();
 };
 
-export {logger, parseCookie, queryString};
+const auth = (req, res, next) => {
+    if (!req.session.auth) {
+        // 尚未登录
+        redirectToLogin(req, res);
+    } else {
+        // 已经登录，放行
+        next();
+    }
+};
+
+export {logger, parseCookie, queryString, auth};

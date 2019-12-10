@@ -1,12 +1,13 @@
 const scheme = () => `
     CREATE TABLE IF NOT EXISTS user(
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    account varchar(16) NOT NULL
+    account varchar(16) NOT NULL,
+    password varchar(255) NOT NULL
 );
 `;
 
-const insert = account => `
-    insert into user (account) values ('${account}');
+const insert = (account, password) => `
+    insert into user (account, password) values ('${account} ${password}');
 `;
 
 const select = name => `

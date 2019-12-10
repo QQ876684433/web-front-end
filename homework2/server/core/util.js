@@ -1,6 +1,6 @@
 const getTimestamp = () => new Date();
 
-const cookieSerialize = (name, val, opt) => {
+const serialize = (name, val, opt) => {
     const pairs = [name + '=' + val];
     opt = opt || {};
     if (opt.maxAge) pairs.push('Max-Age=' + opt.maxAge);
@@ -12,4 +12,11 @@ const cookieSerialize = (name, val, opt) => {
     return pairs.join('; ');
 };
 
-export {getTimestamp, cookieSerialize};
+const setCookie = (res, name, val)=>{
+    let cookies = res.getHeader('Set-Cookie');
+    const session = serialize(name, val);
+    cookies = Array.isArray(cookies) ? cookies.concat(session) : [cookies, session];
+    res.setHeader('Set-Cookie', cookies);
+};
+
+export {getTimestamp, serialize, setCookie};
