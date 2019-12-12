@@ -118,9 +118,21 @@
         flex: 4;
     }
 
+    #username-notification,
+    #password-notification,
+    #password-confirm-notification {
+        font-size: 12px;
+        visibility: hidden;
+        color: red;
+        padding-right: 15px;
+    }
+
     .login-form-username, .login-form-password{
         font-size: 16px;
         margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .login-form-username-input,

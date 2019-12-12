@@ -6,17 +6,97 @@ var _RSAEs = require("../../server/security/RSA-es5");
 
 var _AESEs = require("../../server/security/AES-es5");
 
+// 用户名验证
+var usernameCheck = function usernameCheck(username, usernameNotification) {
+    username = username.value;
+    if (!username) {
+        usernameNotification.innerText = 'cannot be empty!';
+    } else {
+        if (/^[_0-9a-zA-Z]+$/.test(username)) {
+            usernameNotification.innerText = 'can only be 0-9, a-zA-Z or _ !';
+        } else if (/^[a-zA-Z_]+$/.test(username) || /^[0-9_]+$/.test(username)) {
+            usernameNotification.innerText = 'must contain numbers and letters!';
+        } else if (username.length < 6 || username.length > 16) {
+            usernameNotification.innerText = 'must be 6~16 in length!';
+        } else {
+            usernameNotification.style.visibility = 'hidden';
+            return true;
+        }
+    }
+    usernameNotification.style.visibility = 'visible';
+    return false;
+};
+
+// 密码验证
+var passwordCheck = function passwordCheck(password, passwordNotification) {
+    password = password.value;
+    if (!password) {
+        passwordNotification.innerText = 'cannot be empty!';
+    } else {
+        var digits = /[0-9]+/;
+        var letters = /[a-zA-Z]+/;
+        var sign = /[!-/:-@\[-`{-~]+/;
+        if (password.length < 8 || password.length > 20) {
+            passwordNotification.innerText = 'must be 8~20 in length!';
+        } else if (!(digits.test(password) && letters.test(password) && sign.test(password))) {
+            passwordNotification.innerText = 'must contain numbers, letters, and symbols!';
+        } else {
+            passwordNotification.style.visibility = 'hidden';
+            return true;
+        }
+    }
+    passwordNotification.style.visibility = 'visible';
+    return false;
+};
+
+// 再次输入密码验证
+var passwordConfirmCheck = function passwordConfirmCheck(password, passwordConfirm, passwordConfirmNotification) {
+    password = password.value;
+    passwordConfirm = passwordConfirm.value;
+    if (!passwordConfirm) {
+        passwordConfirmNotification.innerText = 'cannot be empty!';
+    } else if (password !== passwordConfirm) {
+        passwordConfirmNotification.innerText = 'inconsistent passwords!';
+    } else {
+        passwordConfirmNotification.style.visibility = 'hidden';
+        return true;
+    }
+    passwordConfirmNotification.style.visibility = 'visible';
+    return false;
+};
+
+// 表单验证
+var formCheck = function formCheck(username, password, passwordConfirm, usernameNotification, passwordNotification, passwordConfirmNotification) {
+    var res1 = usernameCheck(username, usernameNotification);
+    var res2 = passwordCheck(password, passwordNotification);
+    var res3 = passwordConfirmCheck(password, passwordConfirm, passwordConfirmNotification);
+    return res1 && res2 && res3;
+};
+
 window.onload = function () {
+    var usernameInput = document.getElementById('input-username');
+    var passwordInput = document.getElementById('input-password');
+    var passwordConfirmInput = document.getElementById('input-password-confirm');
     var registerButton = document.getElementById('register-action');
+    var usernameNotification = document.getElementById('username-notification');
+    var passwordNotification = document.getElementById('password-notification');
+    var passwordConfirmNotification = document.getElementById('password-confirm-notification');
+
+    // 绑定失去焦点事件
+    usernameInput.onblur = function () {
+        return usernameCheck(usernameInput, usernameNotification);
+    };
+    passwordInput.onblur = function () {
+        return passwordCheck(passwordInput, passwordNotification);
+    };
+    passwordConfirmInput.onblur = function () {
+        return passwordConfirmCheck(passwordInput, passwordConfirmInput, passwordConfirmNotification);
+    };
 
     var onRegister = function onRegister() {
-        var username = document.getElementById('input-username').value;
-        var password = document.getElementById('input-password').value;
-        var passwordConfirm = document.getElementById('input-password-confirm').value;
-        if (password !== passwordConfirm) {
-            alert('两次密码输入不一致!');
-            return;
-        }
+        var username = usernameInput.value;
+        var password = passwordInput.value;
+        if (!formCheck(usernameInput, passwordInput, passwordConfirmInput, usernameNotification, passwordNotification, passwordConfirmNotification)) return;
 
         new Promise(function (resolve, reject) {
             // 客户端(client)生成自己的密钥对

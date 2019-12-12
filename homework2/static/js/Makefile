@@ -1,4 +1,4 @@
-.PHONY: all
+.PHONY: all run
 
 all: ../../server/security/AES.js ../../server/security/RSA.js ./login.js
 	babel ../../server/security/AES.js -o ../../server/security/AES-es5.js
@@ -7,3 +7,6 @@ all: ../../server/security/AES.js ../../server/security/RSA.js ./login.js
 	babel ./register.js -o ./register-es5.js
 	browserify login-es5.js > ./bundles/login-bundle.js
 	browserify register-es5.js > ./bundles/register-bundle.js
+
+run: all ../../server/App.js
+	/usr/bin/babel-node ../../server/App.js
