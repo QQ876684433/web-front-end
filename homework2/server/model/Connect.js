@@ -1,4 +1,4 @@
-import sqlite3, { OPEN_CREATE, OPEN_READWRITE } from 'sqlite3';
+import sqlite3, {OPEN_CREATE, OPEN_READWRITE} from 'sqlite3';
 import * as user from './User';
 
 const sqlite = sqlite3.verbose();
@@ -15,16 +15,14 @@ const connect = database => {
             }
         });
     }
-    db.serialize(() => {
-        // 初始化数据表
-        db.each(`${user.scheme()}`, (err, row) => {
-            if (err) {
-                console.log('failed to exec sql!');
-                console.log(err);
-            } else {
-                console.log('exec sql successfully!');
-            }
-        });
+    // 初始化数据表
+    db.run(`${user.scheme()}`, (err, row) => {
+        if (err) {
+            console.log('failed to exec sql!');
+            console.log(err);
+        } else {
+            console.log('exec sql successfully!');
+        }
     });
 };
 
@@ -45,4 +43,4 @@ const close = () => {
     }
 };
 
-export { connect, close, getDatabase };
+export {connect, close, getDatabase};

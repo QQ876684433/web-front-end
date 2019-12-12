@@ -1,4 +1,4 @@
-import {serialize, setCookie} from "../core/util";
+import {setCookie} from "../core/util";
 
 const sessions = {};
 const key = 'chph_uid';
@@ -11,16 +11,24 @@ const generate = () => {
         expire: (new Date()).getTime() + EXPIRES
     };
     sessions[session.id] = session;
+    console.log('generate: ');
+    console.log(sessions);
     return session;
 };
 
 // session鉴权中间件
 const getSession = (req, res, next) => {
+    console.log('getSession');
     const id = req.cookies[key];
+    console.log('id: '+id);
     if (!id) {
+        console.log('!id');
         req.session = generate();
     } else {
+        console.log('id');
+        console.log(sessions);
         const session = sessions[id];
+        console.log(session);
         if (session) {
             if (session.cookie.expire > (new Date()).getTime()) {
                 // 更新超时时间
@@ -44,16 +52,8 @@ const getSession = (req, res, next) => {
 // 通过hack响应对象的writeHead()方法
 // 实现在响应客户端时设置新的session值
 const setSession = (req, res, next) => {
-    // const writeHead = res.writeHead;
-    // res.writeHead = () => {
-    // let cookies = res.getHeader('Set-Cookie');
-    // const session = serialize(key, req.session.id);
-    // cookies = Array.isArray(cookies) ? cookies.concat(session) : [cookies, session];
-    // res.setHeader('Set-Cookie', cookies);
-    // return writeHead.apply(this, arguments);
-    // };
     setCookie(res, key, req.session.id);
     next();
 };
 
-export {getSession, setSession};
+export {sessions, getSession, setSession};

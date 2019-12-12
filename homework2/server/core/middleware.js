@@ -1,6 +1,7 @@
 import {getTimestamp} from "./util";
 import url from 'url';
 import {redirectToLogin} from "../controller/Redirect";
+import {sessions} from "../security/session";
 
 const logger = (req, res, next) => {
     console.log(`[LOG] ${getTimestamp()} : ${req.url}`);
@@ -35,17 +36,17 @@ const postBody = (req, res, next) => {
             content += chunk;
         });
         req.on('end', () => {
-            req.body = content;
+            req.body = JSON.parse(content);
             next();
         });
     } else {
-        req.body = '{}';
+        req.body = {};
         next();
     }
 };
 
 const auth = (req, res, next) => {
-    if (!req.session.auth) {
+    if (!sessions[req.session.id].auth) {
         // 尚未登录
         redirectToLogin(req, res);
     } else {

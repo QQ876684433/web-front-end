@@ -7,15 +7,15 @@ const scheme = () => `
 `;
 
 const insert = (account, password) => `
-    insert into user (account, password) values ('${account} ${password}');
+    insert into user (account, password) values ('${account}', '${password}');
 `;
 
-const select = name => `
-    select * from user where name='${name}'
+const select = account => `
+    select account, password from user where account='${account}';
 `;
 
 const selectAll = () => `
     select * from user;
 `;
 
-export { scheme };
+export { scheme, insert, select, selectAll };

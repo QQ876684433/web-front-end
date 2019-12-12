@@ -1,6 +1,7 @@
-import * as http from "http";
+import * as https from "https";
 import * as url from "url";
 import * as path from "path";
+import fs from 'fs';
 import {handleStatic} from "./mime";
 
 const app = {};
@@ -60,12 +61,17 @@ const passRouter = (routes, method, path) => (req, res) => {
     }());
 };
 
+const options = {
+    key: fs.readFileSync('/home/steve/Documents/Projects/web-front-end/homework2/server/security/key.pem'),
+    cert: fs.readFileSync('/home/steve/Documents/Projects/web-front-end/homework2/server/security/cert.pem')
+};
+
 let _static = 'static';
 app.setStatic = path => {
     _static = path;
 };
 app.listen = (port, host, callbacks = []) => {
-    http.createServer(((req, res) => {
+    https.createServer(options, ((req, res) => {
         const method = req.method.toLowerCase();
         const urlObj = url.parse(req.url, true);
         const pathname = urlObj.pathname;
@@ -77,7 +83,7 @@ app.listen = (port, host, callbacks = []) => {
             router(req, res);
         }
     })).listen(port, host, () => {
-        console.log(`Server now running on http://${host}:${port}/\n`);
+        console.log(`Server now running on https://${host}:${port}/\n`);
         process.stdin.resume();
         process.on('SIGINT', () => {
             for (let callback of callbacks) {

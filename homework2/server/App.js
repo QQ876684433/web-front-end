@@ -19,8 +19,8 @@ app.use('/', queryString);
 app.use('/', parseCookie);
 app.use('/', postBody);
 app.use('/', getSession);
-app.use('/index', auth);
 app.use('/', setSession);
+app.use('/index', auth);
 
 app.get('/', redirectToIndex);
 app.get('/index', redirectToHomePage);
