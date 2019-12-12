@@ -872,9 +872,9 @@ module.exports = (function () {
         if (!formats.detectAndImport(this.keyPair, keyData, format) && format === undefined) {
             throw Error("Key format must be specified");
         }
-
+        
         this.$cache = {};
-
+        
         return this;
     };
 
@@ -1786,7 +1786,7 @@ module.exports = {
 (function (Buffer){
 /*
  * Basic JavaScript BN library - subset useful for RSA encryption.
- *
+ * 
  * Copyright (c) 2003-2005  Tom Wu
  * All Rights Reserved.
  *
@@ -1801,9 +1801,9 @@ module.exports = {
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
  *
  * IN NO EVENT SHALL TOM WU BE LIABLE FOR ANY SPECIAL, INCIDENTAL,
  * INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER
@@ -1898,7 +1898,7 @@ function am3(i, x, w, j, c, n) {
     return c;
 }
 
-// We need to select the fastest one that works in this environment.
+// We need to select the fastest one that works in this environment. 
 //if (j_lm && (navigator.appName == "Microsoft Internet Explorer")) {
 //	BigInteger.prototype.am = am2;
 //	dbits = 30;
@@ -3329,7 +3329,7 @@ module.exports = BigInteger;
 (function (Buffer){
 /*
  * RSA Encryption / Decryption with PKCS1 v2 Padding.
- *
+ * 
  * Copyright (c) 2003-2005  Tom Wu
  * All Rights Reserved.
  *
@@ -3344,9 +3344,9 @@ module.exports = BigInteger;
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
  *
  * IN NO EVENT SHALL TOM WU BE LIABLE FOR ANY SPECIAL, INCIDENTAL,
  * INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER
@@ -4566,9 +4566,9 @@ exports.rsaVerify = rsaVerify;
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-var _AESEs = require('../../../server/security/AES-es5');
+var _AESEs = require('../../server/security/AES-es5');
 
-var _RSAEs = require('../../../server/security/RSA-es5');
+var _RSAEs = require('../../server/security/RSA-es5');
 
 window.onload = function () {
     var loginButton = document.getElementById('login-action');
@@ -24733,7 +24733,7 @@ util.inherits(Readable, Stream);
 var kProxyEvents = ['error', 'close', 'destroy', 'pause', 'resume'];
 
 function prependListener(emitter, event, fn) {
-  // Sadly this is not cacheable as some libraries bundles their own
+  // Sadly this is not cacheable as some libraries bundle their own
   // event emitter implementation with them.
   if (typeof emitter.prependListener === 'function') return emitter.prependListener(event, fn);
 
@@ -28488,13 +28488,13 @@ Script.prototype.runInContext = function (context) {
     if (!(context instanceof Context)) {
         throw new TypeError("needs a 'context' argument.");
     }
-
+    
     var iframe = document.createElement('iframe');
     if (!iframe.style) iframe.style = {};
     iframe.style.display = 'none';
-
+    
     document.body.appendChild(iframe);
-
+    
     var win = iframe.contentWindow;
     var wEval = win.eval, wExecScript = win.execScript;
 
@@ -28503,7 +28503,7 @@ Script.prototype.runInContext = function (context) {
         wExecScript.call(win, 'null');
         wEval = win.eval;
     }
-
+    
     forEach(Object_keys(context), function (key) {
         win[key] = context[key];
     });
@@ -28512,11 +28512,11 @@ Script.prototype.runInContext = function (context) {
             win[key] = context[key];
         }
     });
-
+    
     var winKeys = Object_keys(win);
 
     var res = wEval.call(win, this.code);
-
+    
     forEach(Object_keys(win), function (key) {
         // Avoid copying circular objects like `top` and `window` by only
         // updating existing context properties or new properties in the `win`
@@ -28531,9 +28531,9 @@ Script.prototype.runInContext = function (context) {
             defineProp(context, key, win[key]);
         }
     });
-
+    
     document.body.removeChild(iframe);
-
+    
     return res;
 };
 

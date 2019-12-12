@@ -3,6 +3,7 @@ import {addUser, getUserByUsername} from "../model/UserRepo";
 import {getKeyPair, rsaDecrypt, rsaVerify} from "../security/RSA";
 import {aesDecrypt} from "../security/AES";
 import {sessions} from "../security/session";
+import {reinforcedHash} from "../security/Hash";
 
 const login = (req, res) => {
     const body = req.body;
@@ -31,10 +32,12 @@ const login = (req, res) => {
         const isValid = rsaVerify(params, Buffer.from(signature.data), clientPub);
         if (isValid) {
             // 签名验证通过
-            const {username, password} = JSON.parse(params);
+            let {username, password} = JSON.parse(params);
+            // 计算加盐哈希后的密码的值
+            password = reinforcedHash(password, username);
             // 检查用户名和密码是否匹配
             getUserByUsername(username, (err, row) => {
-                res.writeHead(200, {'Content-Type':'text/plain'});
+                res.writeHead(200, {'Content-Type': 'text/plain'});
                 if (!err && row.password === password) {
                     sessions[req.session.id].auth = 1;
                     res.write(JSON.stringify({ok: 1}), 'utf8');
@@ -47,7 +50,7 @@ const login = (req, res) => {
             });
         } else {
             // 签名不正确
-            res.writeHead(200, {'Content-Type':'text/plain'});
+            res.writeHead(200, {'Content-Type': 'text/plain'});
             res.write(JSON.stringify({ok: 0, message: '签名错误'}), 'utf8');
             sessions[req.session.id].auth = 0;
             res.end();
@@ -82,7 +85,9 @@ const register = (req, res) => {
         const isValid = rsaVerify(params, Buffer.from(signature.data), clientPub);
         if (isValid) {
             // 签名验证通过
-            const {username, password} = JSON.parse(params);
+            let {username, password} = JSON.parse(params);
+            // 对密码进行哈希并加盐哈希
+            password = reinforcedHash(password, username);
             // 添加新用户
             addUser(username, password, (err, row) => {
                 res.writeHead(200, {'Content-Type': 'text/plain'});
@@ -95,7 +100,7 @@ const register = (req, res) => {
             });
         } else {
             // 签名不正确
-            res.writeHead(200, {'Content-Type':'text/plain'});
+            res.writeHead(200, {'Content-Type': 'text/plain'});
             res.write(JSON.stringify({ok: 0, message: '签名错误'}), 'utf8');
             res.end();
         }
