@@ -103,9 +103,9 @@ window.onload = () => {
         const interval = setInterval(() => {
             registerButton.style.visibility = 'visibility';
             registerButton.innerText = `Pending${arr[counter++ % 3]}`;
-        }, 100);
+        }, 200);
         const closeInterval = () => {
-            registerButton.innerText = `Sign In`;
+            registerButton.innerText = `Sign Up`;
             clearInterval(interval);
         };
 

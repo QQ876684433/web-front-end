@@ -69,7 +69,7 @@ window.onload = () => {
         const interval = setInterval(() => {
             loginResult.style.visibility = 'visibility';
             loginButton.innerText = `Pending${arr[counter++ % 3]}`;
-        }, 100);
+        }, 200);
         const closeInterval = () => {
             loginButton.innerText = `Sign In`;
             clearInterval(interval);
