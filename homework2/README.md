@@ -1,3 +1,26 @@
+## 项目运行
+使用了es6语法，因此需要使用babel-node运行，安装方式：
+
+    sudo npm install babel-cli -g 
+
+项目运行方式，进入项目根目录，运行：
+
+    npm install
+    npm run start
+
+效果截图：
+
+![](https://i.loli.net/2019/12/13/C8nYc6xBELtJTsl.png)
+
+注意：https网址的证书是无效的，手动信任即可
+
+
+## 项目说明
+
+
+
+
+
 以第一次为基础，构建服务端（nodejs），实现：
 
 - 登录注册功能
