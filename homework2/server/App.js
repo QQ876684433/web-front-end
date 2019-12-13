@@ -5,6 +5,7 @@ import _404 from './controller/404';
 import {connect, close} from "./model/Connect";
 import {redirectToHomePage, redirectToIndex, redirectToLogin, redirectToRegister} from "./controller/Redirect";
 import UserRoutes from './controller/UserController';
+import path from 'path';
 
 const host = "127.0.0.1";
 const port = 2333;
@@ -12,7 +13,7 @@ const port = 2333;
 // connect to database
 connect('user');
 const app = chph();
-app.setStatic('/home/steve/Documents/Projects/web-front-end/homework2/static');
+app.setStatic(path.join(__dirname, '../static'));
 
 app.use('/', logger);
 app.use('/', queryString);
@@ -27,7 +28,7 @@ app.get('/index', redirectToHomePage);
 app.get('/login', redirectToLogin);
 app.get('/register', redirectToRegister);
 
-for (let route of UserRoutes){
+for (let route of UserRoutes) {
     app[route.method](route.url, route.handler);
 }
 

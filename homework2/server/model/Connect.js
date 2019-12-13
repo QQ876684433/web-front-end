@@ -1,12 +1,13 @@
 import sqlite3, {OPEN_CREATE, OPEN_READWRITE} from 'sqlite3';
 import * as user from './User';
+import path from 'path';
 
 const sqlite = sqlite3.verbose();
 let db;
 
 const connect = database => {
     if (!db) {
-        db = new sqlite.Database(`/home/steve/Documents/Projects/web-front-end/homework2/server/model/${database}.db`, OPEN_CREATE | OPEN_READWRITE, err => {
+        db = new sqlite.Database(path.join(__dirname, `${database}.db`), OPEN_CREATE | OPEN_READWRITE, err => {
             if (err) {
                 console.log('failed to open db!');
                 console.log(err);
