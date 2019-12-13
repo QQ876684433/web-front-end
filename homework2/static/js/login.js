@@ -1,15 +1,66 @@
 import {aesEncrypt} from '../../server/security/AES-es5';
 import {getKeyPair, rsaEncrypt, rsaSign} from '../../server/security/RSA-es5';
 
+
+// 用户名验证
+const usernameCheck = (username, usernameNotification) => {
+    username = username.value;
+    if (!username) {
+        usernameNotification.innerText = 'cannot be empty!';
+        usernameNotification.style.visibility = 'visible';
+        return false;
+    } else {
+        usernameNotification.style.visibility = 'hidden';
+        return true;
+    }
+};
+
+// 密码验证
+const passwordCheck = (password, passwordNotification, togglePassword) => {
+    password = password.value;
+    if (!password) {
+        passwordNotification.innerText = 'cannot be empty!';
+        passwordNotification.style.visibility = 'visible';
+        togglePassword.style.display = 'none';
+        passwordNotification.style.display = 'block';
+        return false;
+    } else {
+        passwordNotification.style.display = 'none';
+        togglePassword.style.display = 'block';
+        return true;
+    }
+};
+
+
+// 表单验证
+const formCheck = (username,
+                   password,
+                   usernameNotification,
+                   passwordNotification,
+                   togglePassword) => {
+    const res1 = usernameCheck(username, usernameNotification);
+    const res2 = passwordCheck(password, passwordNotification, togglePassword);
+    return res1 && res2;
+};
+
 window.onload = () => {
     const loginButton = document.getElementById('login-action');
     const togglePassword = document.getElementById('toggle-password');
     const passwordInput = document.getElementById('input-password');
     const usernameInput = document.getElementById('input-username');
+    const usernameNotification = document.getElementById('username-notification');
+    const passwordNotification = document.getElementById('password-notification');
+
+    // 绑定失去焦点事件
+    usernameInput.onblur = () => usernameCheck(usernameInput, usernameNotification);
+    passwordInput.onblur = () => passwordCheck(passwordInput, passwordNotification, togglePassword);
 
     const onLogin = () => {
         const username = usernameInput.value;
         const password = passwordInput.value;
+        if (!formCheck(usernameInput, passwordInput, usernameNotification, passwordNotification, togglePassword)) {
+            return;
+        }
         new Promise((resolve, reject) => {
             // 客户端(client)生成自己的密钥对
             const [publicKey, privateKey] = getKeyPair();

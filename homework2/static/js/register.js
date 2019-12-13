@@ -92,7 +92,9 @@ window.onload = () => {
     const onRegister = () => {
         const username = usernameInput.value;
         const password = passwordInput.value;
-        if (!formCheck(usernameInput, passwordInput, passwordConfirmInput, usernameNotification, passwordNotification, passwordConfirmNotification)) return;
+        if (!formCheck(usernameInput, passwordInput, passwordConfirmInput, usernameNotification, passwordNotification, passwordConfirmNotification)) {
+            return;
+        }
 
         new Promise((resolve, reject) => {
             // 客户端(client)生成自己的密钥对

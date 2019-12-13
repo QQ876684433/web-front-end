@@ -6,15 +6,64 @@ var _AESEs = require('../../server/security/AES-es5');
 
 var _RSAEs = require('../../server/security/RSA-es5');
 
+// 用户名验证
+var usernameCheck = function usernameCheck(username, usernameNotification) {
+    username = username.value;
+    if (!username) {
+        usernameNotification.innerText = 'cannot be empty!';
+        usernameNotification.style.visibility = 'visible';
+        return false;
+    } else {
+        usernameNotification.style.visibility = 'hidden';
+        return true;
+    }
+};
+
+// 密码验证
+var passwordCheck = function passwordCheck(password, passwordNotification, togglePassword) {
+    password = password.value;
+    if (!password) {
+        passwordNotification.innerText = 'cannot be empty!';
+        passwordNotification.style.visibility = 'visible';
+        togglePassword.style.display = 'none';
+        passwordNotification.style.display = '';
+        return false;
+    } else {
+        passwordNotification.style.display = 'none';
+        togglePassword.style.display = '';
+        return true;
+    }
+};
+
+// 表单验证
+var formCheck = function formCheck(username, password, usernameNotification, passwordNotification, togglePassword) {
+    var res1 = usernameCheck(username, usernameNotification);
+    var res2 = passwordCheck(password, passwordNotification, togglePassword);
+    return res1 && res2;
+};
+
 window.onload = function () {
     var loginButton = document.getElementById('login-action');
     var togglePassword = document.getElementById('toggle-password');
     var passwordInput = document.getElementById('input-password');
     var usernameInput = document.getElementById('input-username');
+    var usernameNotification = document.getElementById('username-notification');
+    var passwordNotification = document.getElementById('password-notification');
+
+    // 绑定失去焦点事件
+    usernameInput.onblur = function () {
+        return usernameCheck(usernameInput, usernameNotification);
+    };
+    passwordInput.onblur = function () {
+        return passwordCheck(passwordInput, passwordNotification, togglePassword);
+    };
 
     var onLogin = function onLogin() {
         var username = usernameInput.value;
         var password = passwordInput.value;
+        if (!formCheck(usernameInput, passwordInput, usernameNotification, passwordNotification, togglePassword)) {
+            return;
+        }
         new Promise(function (resolve, reject) {
             // 客户端(client)生成自己的密钥对
             var _getKeyPair = (0, _RSAEs.getKeyPair)(),

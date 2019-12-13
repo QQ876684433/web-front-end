@@ -129,14 +129,31 @@
         margin-right: 15px;
     }
 
+    #username-notification,
+    #password-notification {
+        font-size: 14px;
+        visibility: hidden;
+        color: red;
+        padding-right: 15px;
+    }
+
     #toggle-password:hover{
         cursor: pointer;
         color: rgb(143, 0, 209);
     }
 
-    #login-form-username, #login-form-password{
+    #login-form-username,
+    #login-form-password{
         font-size: 18px;
         margin-top: 20px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #login-form-password{
+        margin-top: 30px;
     }
 
     .login-form-username-input,

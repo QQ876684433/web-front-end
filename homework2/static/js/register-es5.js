@@ -96,7 +96,9 @@ window.onload = function () {
     var onRegister = function onRegister() {
         var username = usernameInput.value;
         var password = passwordInput.value;
-        if (!formCheck(usernameInput, passwordInput, passwordConfirmInput, usernameNotification, passwordNotification, passwordConfirmNotification)) return;
+        if (!formCheck(usernameInput, passwordInput, passwordConfirmInput, usernameNotification, passwordNotification, passwordConfirmNotification)) {
+            return;
+        }
 
         new Promise(function (resolve, reject) {
             // 客户端(client)生成自己的密钥对
