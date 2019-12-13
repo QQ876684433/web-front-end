@@ -64,8 +64,6 @@ window.onload = () => {
         new Promise((resolve, reject) => {
             // 客户端(client)生成自己的密钥对
             const [publicKey, privateKey] = getKeyPair();
-            console.log(publicKey);
-            console.log(privateKey);
             if (publicKey && privateKey) {
                 resolve([publicKey, privateKey]);
             } else {
@@ -104,7 +102,13 @@ window.onload = () => {
                             alert('用户登录成功!');
                             window.location.href = '/';
                         } else {
-                            alert('用户登录失败失败!');
+                            const message = data.message;
+                            if (message.content) {
+                                usernameNotification.innerText = message.content;
+                                usernameNotification.style.visibility = 'visible';
+                            } else {
+                                alert(message.other);
+                            }
                         }
                     });
                 } else {

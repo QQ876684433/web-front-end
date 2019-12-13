@@ -71,8 +71,6 @@ window.onload = function () {
                 publicKey = _getKeyPair2[0],
                 privateKey = _getKeyPair2[1];
 
-            console.log(publicKey);
-            console.log(privateKey);
             if (publicKey && privateKey) {
                 resolve([publicKey, privateKey]);
             } else {
@@ -119,7 +117,13 @@ window.onload = function () {
                             alert('用户登录成功!');
                             window.location.href = '/';
                         } else {
-                            alert('用户登录失败失败!');
+                            var message = data.message;
+                            if (message.content) {
+                                usernameNotification.innerText = message.content;
+                                usernameNotification.style.visibility = 'visible';
+                            } else {
+                                alert(message.other);
+                            }
                         }
                     });
                 } else {

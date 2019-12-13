@@ -33,17 +33,31 @@ const login = (req, res) => {
         if (isValid) {
             // 签名验证通过
             let {username, password} = JSON.parse(params);
+
+            // 用户名和密码格式验证
+            if (!username || !password) {
+                res.writeHead(200, {'Content-Type': 'text/plain'});
+                res.write(JSON.stringify({
+                    ok: 0, message: {content: 'wrong username or password', other: ''}
+                }), 'utf8');
+                res.end();
+                return;
+            }
+
             // 计算加盐哈希后的密码的值
             password = reinforcedHash(password, username);
             // 检查用户名和密码是否匹配
             getUserByUsername(username, (err, row) => {
                 res.writeHead(200, {'Content-Type': 'text/plain'});
-                if (!err && row.password === password) {
+                if (!err && row && row.password === password) {
                     sessions[req.session.id].auth = 1;
                     res.write(JSON.stringify({ok: 1}), 'utf8');
                 } else {
                     // 登录失败
-                    res.write(JSON.stringify({ok: 0, message: '用户名或密码不正确'}), 'utf8');
+                    res.write(JSON.stringify({
+                        ok: 0,
+                        message: {content: 'wrong username or password', other: ''}
+                    }), 'utf8');
                     req.session.auth = 0;
                 }
                 res.end();
@@ -51,7 +65,7 @@ const login = (req, res) => {
         } else {
             // 签名不正确
             res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.write(JSON.stringify({ok: 0, message: '签名错误'}), 'utf8');
+            res.write(JSON.stringify({ok: 0, message: {content: '', other: 'signature error!'}}), 'utf8');
             sessions[req.session.id].auth = 0;
             res.end();
         }
@@ -89,9 +103,9 @@ const register = (req, res) => {
 
             // 用户名和密码格式验证
             if (!username
-                && !/^[_0-9a-zA-Z]+$/.test(username)
-                && (/^[a-zA-Z_]+$/.test(username) || /^[0-9_]+$/.test(username))
-                && (username.length < 6 || username.length > 16)) {
+                || !/^[_0-9a-zA-Z]+$/.test(username)
+                || (/^[a-zA-Z_]+$/.test(username) || /^[0-9_]+$/.test(username))
+                || (username.length < 6 || username.length > 16)) {
                 res.writeHead(200, {'Content-Type': 'text/plain'});
                 res.write(JSON.stringify({
                     ok: 0, message: {
@@ -104,8 +118,8 @@ const register = (req, res) => {
                 return;
             }
             if (!password
-                && (password.length < 8 || password.length > 20)
-                && !(/[0-9]+/.test(password)
+                || (password.length < 8 || password.length > 20)
+                || !(/[0-9]+/.test(password)
                     && /[a-zA-Z]+/.test(password)
                     && /[!-/:-@\[-`{-~]+/.test(password))
             ) {
