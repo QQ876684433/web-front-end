@@ -8,7 +8,7 @@ import UserRoutes from './controller/UserController';
 import path from 'path';
 
 const host = "127.0.0.1";
-const port = 2333;
+const port = 23333;
 
 // connect to database
 connect('user');
