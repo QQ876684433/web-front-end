@@ -8,7 +8,7 @@ const usernameCheck = (username, usernameNotification) => {
     if (!username) {
         usernameNotification.innerText = 'cannot be empty!';
     } else {
-        if (/^[_0-9a-zA-Z]+$/.test(username)) {
+        if (!/^[_0-9a-zA-Z]+$/.test(username)) {
             usernameNotification.innerText = 'can only be 0-9, a-zA-Z or _ !';
         } else if (/^[a-zA-Z_]+$/.test(username)
             || /^[0-9_]+$/.test(username)) {
@@ -139,7 +139,19 @@ window.onload = () => {
                             alert('用户注册成功!');
                             window.location.href = '/';
                         } else {
-                            alert('用户注册失败失败!');
+                            const message = data.message;
+                            // 显式错误信息
+                            if (message.username) {
+                                usernameNotification.style.visibility = 'visible';
+                                usernameNotification.innerText = message.username;
+                            }
+                            if (message.password) {
+                                passwordNotification.style.visibility = 'visible';
+                                passwordNotification.innerText = message.password;
+                            }
+                            if (message.other) {
+                                alert(message.other);
+                            }
                         }
                     });
                 } else {

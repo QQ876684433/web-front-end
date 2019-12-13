@@ -86,22 +86,85 @@ const register = (req, res) => {
         if (isValid) {
             // 签名验证通过
             let {username, password} = JSON.parse(params);
-            // 对密码进行哈希并加盐哈希
-            password = reinforcedHash(password, username);
-            // 添加新用户
-            addUser(username, password, (err, row) => {
+
+            // 用户名和密码格式验证
+            if (!username
+                && !/^[_0-9a-zA-Z]+$/.test(username)
+                && (/^[a-zA-Z_]+$/.test(username) || /^[0-9_]+$/.test(username))
+                && (username.length < 6 || username.length > 16)) {
                 res.writeHead(200, {'Content-Type': 'text/plain'});
-                if (!err) {
-                    res.write(JSON.stringify({ok: 1}), 'utf8');
-                } else {
-                    res.write(JSON.stringify({ok: 0, message: '注册失败!'}), 'utf8');
-                }
+                res.write(JSON.stringify({
+                    ok: 0, message: {
+                        username: 'username is illegal!',
+                        password: '',
+                        other: ''
+                    }
+                }), 'utf8');
                 res.end();
+                return;
+            }
+            if (!password
+                && (password.length < 8 || password.length > 20)
+                && !(/[0-9]+/.test(password)
+                    && /[a-zA-Z]+/.test(password)
+                    && /[!-/:-@\[-`{-~]+/.test(password))
+            ) {
+                res.writeHead(200, {'Content-Type': 'text/plain'});
+                res.write(JSON.stringify({
+                    ok: 0, message: {
+                        username: '',
+                        password: 'password is illegal!',
+                        other: ''
+                    }
+                }), 'utf8');
+                res.end();
+                return;
+            }
+
+            // 用户名是否存在检验
+            getUserByUsername(username, (err, row) => {
+                if (!err && row) {
+                    // 登录失败
+                    res.writeHead(200, {'Content-Type': 'text/plain'});
+                    res.write(JSON.stringify({
+                        ok: 0, message: {
+                            username: 'username already exists!',
+                            password: '',
+                            other: ''
+                        }
+                    }), 'utf8');
+                    res.end();
+                } else if (err) {
+                    // 出现数据库内部错误
+                    res.writeHead(200, {'Content-Type': 'text/plain'});
+                    res.write(JSON.stringify({
+                        ok: 0, message: {
+                            username: '',
+                            password: '',
+                            other: 'server error!'
+                        }
+                    }), 'utf8');
+                    res.end();
+                } else {
+                    // 用户名和密码验证通过
+                    // 对密码进行哈希并加盐哈希
+                    password = reinforcedHash(password, username);
+                    // 添加新用户
+                    addUser(username, password, (err, row) => {
+                        res.writeHead(200, {'Content-Type': 'text/plain'});
+                        if (!err) {
+                            res.write(JSON.stringify({ok: 1}), 'utf8');
+                        } else {
+                            res.write(JSON.stringify({ok: 0, message: 'register failed!'}), 'utf8');
+                        }
+                        res.end();
+                    });
+                }
             });
         } else {
             // 签名不正确
             res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.write(JSON.stringify({ok: 0, message: '签名错误'}), 'utf8');
+            res.write(JSON.stringify({ok: 0, message: {other: 'signature error!'}}), 'utf8');
             res.end();
         }
     }
