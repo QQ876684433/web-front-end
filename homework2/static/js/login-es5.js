@@ -26,11 +26,11 @@ var passwordCheck = function passwordCheck(password, passwordNotification, toggl
         passwordNotification.innerText = 'cannot be empty!';
         passwordNotification.style.visibility = 'visible';
         togglePassword.style.display = 'none';
-        passwordNotification.style.display = '';
+        passwordNotification.style.display = 'block';
         return false;
     } else {
         passwordNotification.style.display = 'none';
-        togglePassword.style.display = '';
+        togglePassword.style.display = 'block';
         return true;
     }
 };
