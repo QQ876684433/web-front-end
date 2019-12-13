@@ -3,10 +3,13 @@ import {getKeyPair, rsaEncrypt, rsaSign} from '../../server/security/RSA-es5';
 
 window.onload = () => {
     const loginButton = document.getElementById('login-action');
+    const togglePassword = document.getElementById('toggle-password');
+    const passwordInput = document.getElementById('input-password');
+    const usernameInput = document.getElementById('input-username');
 
     const onLogin = () => {
-        const username = document.getElementById('input-username').value;
-        const password = document.getElementById('input-password').value;
+        const username = usernameInput.value;
+        const password = passwordInput.value;
         new Promise((resolve, reject) => {
             // 客户端(client)生成自己的密钥对
             const [publicKey, privateKey] = getKeyPair();
@@ -59,6 +62,17 @@ window.onload = () => {
             });
         });
     };
+    const onTogglePassword = () => {
+        const type = passwordInput.getAttribute('type');
+        if (type === 'password') {
+            passwordInput.setAttribute('type', 'text');
+            togglePassword.innerText = 'hide password';
+        } else {
+            passwordInput.setAttribute('type', 'password');
+            togglePassword.innerText = 'show password';
+        }
+    };
 
     loginButton.onclick = onLogin;
+    togglePassword.onclick = onTogglePassword;
 };

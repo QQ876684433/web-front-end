@@ -124,17 +124,18 @@
         align-items: center;
     }
 
-    #forget-password{
-        font-size: 12px;
+    #toggle-password{
+        font-size: 14px;
+        margin-right: 15px;
     }
 
-    #forget-password:hover{
+    #toggle-password:hover{
         cursor: pointer;
         color: rgb(143, 0, 209);
     }
 
     #login-form-username, #login-form-password{
-        font-size: 16px;
+        font-size: 18px;
         margin-top: 20px;
     }
 
@@ -147,6 +148,7 @@
         color: #1a1a1a;
         font-weight: bolder;
         line-height: 24px;
+        font-size: 15px;
 
         padding-left: 10px;
         padding-right: 10px;

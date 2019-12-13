@@ -4572,10 +4572,13 @@ var _RSAEs = require('../../server/security/RSA-es5');
 
 window.onload = function () {
     var loginButton = document.getElementById('login-action');
+    var togglePassword = document.getElementById('toggle-password');
+    var passwordInput = document.getElementById('input-password');
+    var usernameInput = document.getElementById('input-username');
 
     var onLogin = function onLogin() {
-        var username = document.getElementById('input-username').value;
-        var password = document.getElementById('input-password').value;
+        var username = usernameInput.value;
+        var password = passwordInput.value;
         new Promise(function (resolve, reject) {
             // 客户端(client)生成自己的密钥对
             var _getKeyPair = (0, _RSAEs.getKeyPair)(),
@@ -4640,8 +4643,19 @@ window.onload = function () {
             });
         });
     };
+    var onTogglePassword = function onTogglePassword() {
+        var type = passwordInput.getAttribute('type');
+        if (type === 'password') {
+            passwordInput.setAttribute('type', 'text');
+            togglePassword.innerText = 'hide password';
+        } else {
+            passwordInput.setAttribute('type', 'password');
+            togglePassword.innerText = 'show password';
+        }
+    };
 
     loginButton.onclick = onLogin;
+    togglePassword.onclick = onTogglePassword;
 };
 
 },{"../../server/security/AES-es5":24,"../../server/security/RSA-es5":25}],27:[function(require,module,exports){

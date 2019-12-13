@@ -128,7 +128,7 @@
     }
 
     .login-form-username, .login-form-password{
-        font-size: 16px;
+        font-size: 18px;
         margin-top: 20px;
         display: flex;
         justify-content: space-between;
@@ -144,6 +144,7 @@
         color: #1a1a1a;
         font-weight: bolder;
         line-height: 24px;
+        font-size: 15px;
 
         padding-left: 10px;
         padding-right: 10px;
