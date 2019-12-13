@@ -81,6 +81,7 @@ window.onload = function () {
     var usernameNotification = document.getElementById('username-notification');
     var passwordNotification = document.getElementById('password-notification');
     var passwordConfirmNotification = document.getElementById('password-confirm-notification');
+    var registerResult = document.getElementById('register-result');
 
     // 绑定失去焦点事件
     usernameInput.onblur = function () {
@@ -99,6 +100,18 @@ window.onload = function () {
         if (!formCheck(usernameInput, passwordInput, passwordConfirmInput, usernameNotification, passwordNotification, passwordConfirmNotification)) {
             return;
         }
+
+        // 添加Pending提示
+        var counter = 0;
+        var arr = ['.', '..', '...'];
+        var interval = setInterval(function () {
+            registerButton.style.visibility = 'visibility';
+            registerButton.innerText = "Pending" + arr[counter++ % 3];
+        }, 100);
+        var closeInterval = function closeInterval() {
+            registerButton.innerText = "Sign In";
+            clearInterval(interval);
+        };
 
         new Promise(function (resolve, reject) {
             // 客户端(client)生成自己的密钥对
@@ -150,9 +163,11 @@ window.onload = function () {
                     }).then(function (resp) {
                         return resp.json();
                     }).then(function (data) {
+                        closeInterval();
+
                         if (data.ok) {
                             // 注册成功
-                            alert('用户注册成功!');
+                            registerResult.innerText = 'Sign up successfully!';
                             window.location.href = '/';
                         } else {
                             var message = data.message;
@@ -166,12 +181,13 @@ window.onload = function () {
                                 passwordNotification.innerText = message.password;
                             }
                             if (message.other) {
-                                alert(message.other);
+                                registerResult.innerText = message.other;
                             }
                         }
                     });
                 } else {
-                    alert('获取服务端公钥失败!');
+                    closeInterval();
+                    console.log('获取服务端公钥失败!');
                 }
             });
         });

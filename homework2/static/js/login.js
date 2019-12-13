@@ -50,6 +50,7 @@ window.onload = () => {
     const usernameInput = document.getElementById('input-username');
     const usernameNotification = document.getElementById('username-notification');
     const passwordNotification = document.getElementById('password-notification');
+    const loginResult = document.getElementById('login-result');
 
     // 绑定失去焦点事件
     usernameInput.onblur = () => usernameCheck(usernameInput, usernameNotification);
@@ -61,6 +62,19 @@ window.onload = () => {
         if (!formCheck(usernameInput, passwordInput, usernameNotification, passwordNotification, togglePassword)) {
             return;
         }
+
+        // 添加Pending提示
+        let counter = 0;
+        const arr = ['.', '..', '...'];
+        const interval = setInterval(() => {
+            loginResult.style.visibility = 'visibility';
+            loginButton.innerText = `Pending${arr[counter++ % 3]}`;
+        }, 100);
+        const closeInterval = () => {
+            loginButton.innerText = `Sign In`;
+            clearInterval(interval);
+        };
+
         new Promise((resolve, reject) => {
             // 客户端(client)生成自己的密钥对
             const [publicKey, privateKey] = getKeyPair();
@@ -97,9 +111,10 @@ window.onload = () => {
                         body: reqBody,
                         method: 'POST',
                     }).then(resp => resp.json()).then(data => {
+                        closeInterval();
                         if (data.ok) {
                             // 注册成功
-                            alert('用户登录成功!');
+                            loginResult.innerText = 'Sign in successfully!';
                             window.location.href = '/';
                         } else {
                             const message = data.message;
@@ -107,12 +122,14 @@ window.onload = () => {
                                 usernameNotification.innerText = message.content;
                                 usernameNotification.style.visibility = 'visible';
                             } else {
-                                alert(message.other);
+                                loginResult.innerText = message.other;
                             }
                         }
                     });
                 } else {
-                    alert('获取服务端公钥失败!');
+                    closeInterval();
+                    loginResult.innerText = 'login failed!';
+                    console.log('获取服务端公钥失败!');
                 }
             });
         });

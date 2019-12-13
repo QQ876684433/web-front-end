@@ -220,11 +220,18 @@
         background:-webkit-linear-gradient(right, #fc00ff, #00dbde);
     }
 
+    #login-result {
+        /*visibility: hidden;*/
+        font-size: 14px;
+        color: red;
+    }
+
     #register{
         width: 100%;
 
         display: flex;
-        flex-direction: row-reverse;
+        flex-direction: row;
+        justify-content: space-between;
     }
 
     #register a{
