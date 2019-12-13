@@ -4671,9 +4671,9 @@ window.onload = function () {
         var interval = setInterval(function () {
             registerButton.style.visibility = 'visibility';
             registerButton.innerText = "Pending" + arr[counter++ % 3];
-        }, 100);
+        }, 200);
         var closeInterval = function closeInterval() {
-            registerButton.innerText = "Sign In";
+            registerButton.innerText = "Sign Up";
             clearInterval(interval);
         };
 

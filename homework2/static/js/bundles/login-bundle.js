@@ -4636,7 +4636,7 @@ window.onload = function () {
         var interval = setInterval(function () {
             loginResult.style.visibility = 'visibility';
             loginButton.innerText = 'Pending' + arr[counter++ % 3];
-        }, 100);
+        }, 200);
         var closeInterval = function closeInterval() {
             loginButton.innerText = 'Sign In';
             clearInterval(interval);
