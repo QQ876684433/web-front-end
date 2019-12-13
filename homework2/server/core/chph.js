@@ -2,7 +2,8 @@ import * as https from "https";
 import * as http from 'http';
 import * as url from "url";
 import * as path from "path";
-import fs from 'fs';
+import key from '../security/key';
+import cert from '../security/cert';
 import {handleStatic} from "./mime";
 
 const app = {};
@@ -63,8 +64,10 @@ const passRouter = (routes, method, path) => (req, res) => {
 };
 
 const options = {
-    key: fs.readFileSync('/home/steve/Documents/Projects/web-front-end/homework2/server/security/key.pem'),
-    cert: fs.readFileSync('/home/steve/Documents/Projects/web-front-end/homework2/server/security/cert.pem')
+    // key: fs.readFileSync('/home/steve/Documents/Projects/web-front-end/homework2/server/security/key.pem'),
+    // cert: fs.readFileSync('/home/steve/Documents/Projects/web-front-end/homework2/server/security/cert.pem')
+    key: key,
+    cert: cert
 };
 
 let _static = 'static';
