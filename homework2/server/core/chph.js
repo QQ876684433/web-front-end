@@ -1,4 +1,5 @@
 import * as https from "https";
+import * as http from 'http';
 import * as url from "url";
 import * as path from "path";
 import fs from 'fs';
@@ -71,7 +72,7 @@ app.setStatic = path => {
     _static = path;
 };
 app.listen = (port, host, callbacks = []) => {
-    https.createServer(options, ((req, res) => {
+    const handler = (req, res) => {
         const method = req.method.toLowerCase();
         const urlObj = url.parse(req.url, true);
         const pathname = urlObj.pathname;
@@ -82,15 +83,27 @@ app.listen = (port, host, callbacks = []) => {
             const router = passRouter(app.routes, method, pathname);
             router(req, res);
         }
-    })).listen(port, host, () => {
-        console.log(`Server now running on https://${host}:${port}/\n`);
+    };
+
+    http.createServer(handler).listen(
+        port, host, () => {
+            console.log(`HTTP Server now running on http://${host}:${port}/`);
+            process.stdin.resume();
+            process.on('SIGINT', () => {
+                console.log();
+                console.log('HTTP Server shutdown!');
+            });
+        }
+    );
+
+    https.createServer(options, handler).listen(port + 1, host, () => {
+        console.log(`HTTPS Server now running on https://${host}:${port + 1}/`);
         process.stdin.resume();
         process.on('SIGINT', () => {
             for (let callback of callbacks) {
                 callback();
             }
-            console.log('\n');
-            console.log('Server shutdown!\n');
+            console.log('HTTPS Server shutdown!');
             process.exit(2);
         });
     });
