@@ -1,21 +1,222 @@
-## 项目运行
+# 作业二 - login
+
+陈培鸿 - 171250610
+
+## 运行方法
+
 使用了es6语法，因此需要使用babel-node运行，安装方式：
 
-    sudo npm install babel-cli -g 
+```shell
+sudo npm install babel-cli -g 
+```
 
 项目运行方式，进入项目根目录，运行：
 
-    npm install
-    npm run start
+```shell
+npm install
+npm run start
+```
 
 效果截图：
 
 ![](https://i.loli.net/2019/12/13/C8nYc6xBELtJTsl.png)
 
-注意：https网址的证书是无效的，手动信任即可
+！！！！！！！！！！注意：**https网址的证书是无效的，手动信任即可**！！！！！！！！！！！
+
+## 运行截图
+
+### 注册界面
+
+![](https://i.loli.net/2019/12/16/o5Vz1GFekqEIrT9.png)
+
+![](https://i.loli.net/2019/12/16/U12uQ3LitmEYlMT.png)
+
+![](https://i.loli.net/2019/12/16/r5wgJNT8DBd2Ivt.png)
+
+![](https://i.loli.net/2019/12/16/2p6HgntvGdIWAij.png)
+
+![](https://i.loli.net/2019/12/16/sLHuCRfASezZJqF.png)
+
+![](https://i.loli.net/2019/12/16/f3oKs7U2y4AODBr.png)
+
+![](https://i.loli.net/2019/12/16/ziFpURkvBMxlheS.png)
+
+（注册过程中，按钮处显示的是Pending，并且是Pending.  Pending.. Pending...循环，提供给用户良好的体验）
+
+### 登录界面
+
+![](https://i.loli.net/2019/12/16/1s5HnxyNjzcuEKl.png)
+
+### 响应式布局
+
+![](https://i.loli.net/2019/12/16/VmSUnBj6fxMed1s.png)
+
+![](https://i.loli.net/2019/12/16/D69ECxIRUuwXpSM.png)
+
+### 登录成功
+
+![](https://i.loli.net/2019/12/16/wgAIvibMqj7aOSV.png)
+
+![](https://i.loli.net/2019/12/16/ofOukCpmxPFJMK9.png)
+
+## 数据表截图
+
+项目中使用的是轻量级的**sqlite3**数据库：
+
+![](https://i.loli.net/2019/12/16/N8SW1H9XiFacO2j.png)
+
+相关的sql建表和查询语句：
+
+![](https://i.loli.net/2019/12/16/4QofJ7lxXN6qOPA.png)
 
 
-## 项目说明
+
+## 代码说明
+
+### 数据传输安全
+
+为了保证敏感数据的安全传输，项目中使用了双重方案：
+
+- 在HTTP协议服务器之外还提供了HTTPS服务器，以提供安全的HTTP通信传输
+
+  HTTP和HTTPS分别启动在不同的端口中：
+
+  ![](https://i.loli.net/2019/12/16/9aXOwpIHbhfDAnQ.png)
+
+  其中HTTPS的证书和RSA私钥保存在单独的js文件中而不是本地文件系统中，虽然修改起来不方便，但是提高了响应的速度：
+
+  ![](https://i.loli.net/2019/12/16/oF5XtignWaJrQ1K.png)
+
+- 第二个方案就是使用AES+RSA的加密传输方式，即使在HTTPS退化到HTTP时依然能够提供安全传输的保证
+
+  - 封装AES加密模块，为前端和后端提供统一的接口
+
+    ![](https://i.loli.net/2019/12/16/cEuzOd54Q3CpvhR.png)
+
+  - 将RSA中公私钥生成、rsa加密解密、签名验证等封装成一个模块，为前端和后端提供统一的接口；其中公私钥的生成使用了node-rsa库
+
+    ![Q4hvK1.png](https://s2.ax1x.com/2019/12/16/Q4hvK1.png)
+
+  - 注册登录的加密传输流程相似，因此这里用登录为例进行说明
+
+    - 第一个阶段是客户端和服务端本地生成各自的公私钥并交换
+      - 客户端
+
+        由于公私钥的生成可能比较消耗资源，因此将该过程包装成Promise异步过程调用
+
+        ![Q44XFS.png](https://s2.ax1x.com/2019/12/16/Q44XFS.png)
+
+        获取到公私钥后，客户端发起第一阶段的请求，向服务端发送自己的公钥并获取服务端的公钥
+
+        ![Q45Mex.png](https://s2.ax1x.com/2019/12/16/Q45Mex.png)
+
+        获取到服务端的公钥之后：
+
+        - 客户端生成自己的AES密钥
+        - 使用自己的RSA私钥(privateKey)对请求明文数据(params)进行数字签名
+        - 然后将签名加入到请求参数中并转换为json格式
+        - 紧接着使用AES密钥对json数据进行加密得到密文(data)
+        - 使用sever的RSA公钥对aesKey进行加密(encryptkey)，加密后的内容只有服务端的私钥才能够解密
+        - 最后将密文和加密后的AES密钥发起第二阶段的请求
+
+        ![Q45On1.png](https://s2.ax1x.com/2019/12/16/Q45On1.png)
+
+        最后根据服务端验证和响应的结果来判断是否通过登录验证，如果通过则重定向到首页，否则则提示登录失败
+
+        ![1576489078769](/home/steve/.config/Typora/typora-user-images/1576489078769.png)
+
+      - 服务端
+
+        服务端根据客户端请求消息中的stage参数来决定当前进行到了哪个阶段
+
+        - 如果是第一阶段，则服务端获取到客户端公钥后将其临时保存到对应的session中，同时生成自己的公私钥，并将公钥响应给客户端
+
+          ![Q4IR8e.png](https://s2.ax1x.com/2019/12/16/Q4IR8e.png)
+
+        - 如果是第二阶段，则从session中取出对应的客户端的公钥和服务端为其生成的私钥，按照客户端签名和加密的流程反向验证签名和解密数据
+
+          ![Q4IqPS.png](https://s2.ax1x.com/2019/12/16/Q4IqPS.png)
+
+          - 如果签名验证通过，则查询数据库并验证用户名和密码是否匹配，由于用户密码是加盐哈希之后存储的，因此也需要将客户端传过来的密码相应地加盐哈希，然后再和数据库取出来的内容进行对比，如果通过验证，则将session对应的auth标记为1，以记录该用户已经通过登录验证并且处于登录状态
+
+            ![Q4oiPU.png](https://s2.ax1x.com/2019/12/16/Q4oiPU.png)
+
+### 数据存储安全
+
+- 首先将哈希和加盐哈希封装起来，提供统一的接口
+
+  ![](https://i.loli.net/2019/12/16/n8kheRLDPCFzAsw.png)
+
+- 哈希算法是MD5，使用用户名作为盐，进行再哈希，提高数据的安全性，同时也不需要额外再为每个用户生成并保存盐
+
+- 关于加盐哈希存储和验证部分在上面的服务端数据传输安全部分已经有说明
+
+### 表单验证
+
+采用前后端结合的方式
+
+- 前端是为了提高用户体验
+
+  - 登录表单验证只需验证输入是否为空即可，不提供更加细致的验证，是为了提高恶意攻击的复杂度
+
+    ![Q4Ttl4.png](https://s2.ax1x.com/2019/12/16/Q4Ttl4.png)
+
+  - 注册部分的表单验证尽可能地详尽，以更好地协助用户完成符合要求的注册流程
+
+    - 用户名长度6~16，并且需要同时包含数字和字母
+
+      ![Q47t4f.png](https://s2.ax1x.com/2019/12/16/Q47t4f.png)
+
+    - 密码同时包含数字、字母和ASCII可见符号，长度8~20
+
+      ![Q47DDs.png](https://s2.ax1x.com/2019/12/16/Q47DDs.png)
+
+    - 再次输入密码只需要验证是否为空或者和密码相同即可
+
+      ![Q476U0.png](https://s2.ax1x.com/2019/12/16/Q476U0.png)
+
+    - 另外，注册的表单不提供显示密码的功能，是为了使得用户对于输入的密码和再次输入的密码是没有误输入和有目的的，以确定用户对自己输入的密码经过慎重考虑了
+
+- 后端验证是提高数据安全性
+
+  - 登录的验证并不需要特别的验证，因为这部分数据不会存储，只要注册部分合法了，那么取出来的数据必定是合法的，另外由于登录的反馈信息应该是尽可能模糊的，因此也无需去验证客户端登录时传过来的用户名和密码是否合法；为了节省计算资源，对于空密码或者空用户名直接响应登录失败，而无需进行接下来的多余步骤
+
+    ![Q4H1RU.png](https://s2.ax1x.com/2019/12/16/Q4H1RU.png)
+
+  - 注册部分的验证，只要用户是在正常的操作下完成的表单，那么必然是通过了前端验证，或者出错了的话前端会进行相应的提示，如果服务端接收到了非法的注册表单，那么必然是客户端在非法的操作下越过了前端的校验，这时候只需要监测出是非法表单数据即可，而无需响应详细的错误信息，因为这部分是前端的职责，后端的数据安全目的也达到了
+
+    ![Q4H7Lj.png](https://s2.ax1x.com/2019/12/16/Q4H7Lj.png)
+
+### 其他说明
+
+- 由于前后端共用了部分接口代码，前端在浏览器环境下是无法使用es6语法和node模块的，因此编写了一个Makefile，使用相关的工具将代码编译成能够在浏览器js引擎中运行的代码：
+
+  ![1576490911749](/home/steve/.config/Typora/typora-user-images/1576490911749.png)
+
+  - babel是将es6语法转换成es5语法，因为browserify工具支持es6语法orz......
+  - 然后使用browserify将转换后的es5文件转换成浏览器js引擎能够执行的bundle文件
+
+- 由于比较习惯使用es6语法，无奈node本身不支持直接运行，因此只能引入babel-cli工具，通过babel-node来运行后端代码
+
+- 数据库使用的是轻量级的sqlite3数据库，无需安装，只需要导入相应的node sqlite3库即可使用，它会生成一个*.db文件作为数据存储文件
+
+- 通过编写中间件函数来解决与业务无关的问题，将具体的业务剥离出来，便于复用和开发维护
+
+  ![1576491245100](/home/steve/.config/Typora/typora-user-images/1576491245100.png)
+
+- 响应式布局（本来在作业一中就已经有的，这里提一下）
+
+  ![Q4qqP0.png](https://s2.ax1x.com/2019/12/16/Q4qqP0.png)
+
+  ![Q4LCI1.png](https://s2.ax1x.com/2019/12/16/Q4LCI1.png)
+
+  ![Q4LVMD.png](https://s2.ax1x.com/2019/12/16/Q4LVMD.png)
+
+  ![Q4LZse.png](https://s2.ax1x.com/2019/12/16/Q4LZse.png)
+
+  
+
+## 附：项目说明
 
 
 
