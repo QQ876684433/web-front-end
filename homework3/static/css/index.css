@@ -77,7 +77,7 @@
         max-width: 100%;
         min-width: 100%;
         /* 在图片没加载时，高度为0，使用padding进行占位 */
-        padding-bottom: 50%;
+        /*padding-bottom: 50%;*/
         border-radius: 5px;
     }
 }
