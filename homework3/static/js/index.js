@@ -11,7 +11,7 @@ window.onload = () => {
         //     });
 
         images[i].setAttribute('src', `/assets/screenshots/progressive/${i + 1}.jpg`);
-        images[i].onload = () => {
+        images[i].onloadstart = () => {
             images[i].style.padding = '0';
         };
     }
