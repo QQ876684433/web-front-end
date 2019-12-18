@@ -47,7 +47,10 @@
         align-items: center;
         flex-direction: column;
 
-        margin: 10px;
+        /* 防止所有图片未加载时布局变形 */
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
     }
 
     #title{
@@ -57,6 +60,8 @@
     }
 
     #screenshots{
+        /* 防止所有图片未加载时布局变形，图片img缩到中间 */
+        width: 100%;
         margin: 0 auto;
         padding-bottom: 10px;
         column-count: 3;
@@ -70,6 +75,9 @@
 
     .screenshot-item img{
         max-width: 100%;
+        min-width: 100%;
+        /* 在图片没加载时，高度为0，使用padding进行占位 */
+        padding-bottom: 50%;
         border-radius: 5px;
     }
 }
