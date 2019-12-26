@@ -51,10 +51,22 @@ window.onload = () => {
     const usernameNotification = document.getElementById('username-notification');
     const passwordNotification = document.getElementById('password-notification');
     const loginResult = document.getElementById('login-result');
+    const sider = document.getElementById('sider');
 
     // 绑定失去焦点事件
     usernameInput.onblur = () => usernameCheck(usernameInput, usernameNotification);
     passwordInput.onblur = () => passwordCheck(passwordInput, passwordNotification, togglePassword);
+
+    // 获取图片资源
+    new Promise(((resolve, reject) => {
+        fetch('assets/login.jpeg', {
+            method:'GET',
+            responseType: 'blob'
+        }).then(resp => resp.blob()).then(resolve);
+    })).then(img => {
+        sider.style.backgroundImage = `url(${window.URL.createObjectURL(img)})`;
+        console.log(`url(${window.URL.createObjectURL(img)})`);
+    });
 
     const onLogin = () => {
         const username = usernameInput.value;

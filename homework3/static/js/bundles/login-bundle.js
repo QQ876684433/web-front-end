@@ -4614,6 +4614,7 @@ window.onload = function () {
     var usernameNotification = document.getElementById('username-notification');
     var passwordNotification = document.getElementById('password-notification');
     var loginResult = document.getElementById('login-result');
+    var sider = document.getElementById('sider');
 
     // 绑定失去焦点事件
     usernameInput.onblur = function () {
@@ -4622,6 +4623,19 @@ window.onload = function () {
     passwordInput.onblur = function () {
         return passwordCheck(passwordInput, passwordNotification, togglePassword);
     };
+
+    // 获取图片资源
+    new Promise(function (resolve, reject) {
+        fetch('assets/login.jpeg', {
+            method: 'GET',
+            responseType: 'blob'
+        }).then(function (resp) {
+            return resp.blob();
+        }).then(resolve);
+    }).then(function (img) {
+        sider.style.backgroundImage = 'url(' + window.URL.createObjectURL(img) + ')';
+        console.log('url(' + window.URL.createObjectURL(img) + ')');
+    });
 
     var onLogin = function onLogin() {
         var username = usernameInput.value;

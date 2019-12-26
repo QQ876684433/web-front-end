@@ -15,6 +15,7 @@ const mime = {
 const handleStatic = (res, pathname, ext) => {
     fs.exists(pathname, exists => {
         if (!exists) {
+            console.log('not exist');
             res.writeHead(404, {'Content-Type': 'text/plain'});
             res.write(`The request url ${pathname} was not found on this server`);
             res.end();
