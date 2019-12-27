@@ -27,8 +27,7 @@ window.onload = () => {
         const videoUrl = 'assets/P5_OP.webm';
         fetch(videoUrl, {
             method: 'GET',
-            responseType: 'arraybuffer',
-            acceptEncoding: 'gzip, deflate, br'
+            responseType: 'arraybuffer'
         }).then(response => response.arrayBuffer())
             .then(arrayBuffer => {
                 sourceBuffer.addEventListener('updateend', e => {
