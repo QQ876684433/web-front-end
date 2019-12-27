@@ -81,7 +81,7 @@ app.listen = (port, host, callbacks = []) => {
         const pathname = urlObj.pathname;
         const ext = path.extname(pathname).slice(1);
         if (ext) {
-            handleStatic(res, _static + pathname, ext);
+            handleStatic(req, res, _static + pathname, ext);
         } else {
             const router = passRouter(app.routes, method, pathname);
             router(req, res);

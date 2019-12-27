@@ -99,7 +99,8 @@ window.onload = function () {
     new Promise(function (resolve, reject) {
         fetch('assets/login.jpeg', {
             method: 'GET',
-            responseType: 'blob'
+            responseType: 'blob',
+            acceptEncoding: 'gzip, deflate, br'
         }).then(function (resp) {
             return resp.blob();
         }).then(resolve);

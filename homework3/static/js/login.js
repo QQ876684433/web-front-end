@@ -61,7 +61,8 @@ window.onload = () => {
     new Promise(((resolve, reject) => {
         fetch('assets/login.jpeg', {
             method:'GET',
-            responseType: 'blob'
+            responseType: 'blob',
+            acceptEncoding: 'gzip, deflate, br'
         }).then(resp => resp.blob()).then(resolve);
     })).then(img => {
         sider.style.backgroundImage = `url(${window.URL.createObjectURL(img)})`;
