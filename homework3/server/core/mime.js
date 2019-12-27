@@ -10,7 +10,10 @@ const mime = {
     "ico": "image/x-icon",
     "jpeg": "image/jpeg",
     "jpg": "image/jpeg",
-    "png": "image/png"
+    "png": "image/png",
+    "webm": "video/webm",
+    "mp4": "video/mp4"
+
 };
 
 const handleStatic = (req, res, pathname, ext) => {
