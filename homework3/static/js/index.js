@@ -19,7 +19,7 @@ window.onload = () => {
     // const mediaSource = new MediaSource();
     // video.src = URL.createObjectURL(mediaSource);
     // mediaSource.addEventListener('sourceopen', e => {
-    //     URL.revokeObjectURL(video.src);
+    //     // URL.revokeObjectURL(video.src);
     //     // 设置 媒体的编码类型
     //     const mime = 'video/webm; codecs="vorbis,vp8"';
     //     const mediaSource = e.target;
@@ -41,4 +41,15 @@ window.onload = () => {
     //             sourceBuffer.appendBuffer(arrayBuffer);
     //         });
     // });
+
+    const videoUrl = 'assets/P5_OP.webm';
+    fetch(videoUrl, {
+        method: 'GET',
+        responseType: 'blob'
+    })
+        .then(response => response.blob())
+        .then(blob => {
+            video.src = URL.createObjectURL(blob);
+        });
+
 };
