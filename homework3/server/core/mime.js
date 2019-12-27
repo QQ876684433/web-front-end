@@ -22,11 +22,11 @@ const handleStatic = (req, res, pathname, ext) => {
             res.end();
         } else {
             let acceptEncoding = req.headers['accept-encoding']; //取得浏览器的accept-encoding头，询问支持哪种压缩
-            if (acceptEncoding.match(/\bgzip\b/)) { //浏览器支持gzip格式
+            if (acceptEncoding && acceptEncoding.match(/\bgzip\b/)) { //浏览器支持gzip格式
                 res.setHeader('Content-Encoding', 'gzip'); //告知浏览器发送的数据是gzip压缩格式
                 let gzip = zlib.createGzip();
                 fs.createReadStream(pathname).pipe(gzip).pipe(res); //压缩后输出
-            } else if (acceptEncoding.match(/\bdeflate\b/)) { //浏览器支持deflate格式
+            } else if (acceptEncoding && acceptEncoding.match(/\bdeflate\b/)) { //浏览器支持deflate格式
                 let deflate = zlib.createDeflate();
                 res.setHeader('Content-Encoding', 'deflate');
                 fs.createReadStream(pathname).pipe(deflate).pipe(res); // 压缩后输出
