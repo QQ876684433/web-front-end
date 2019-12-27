@@ -22,10 +22,10 @@ const handleStatic = (req, res, pathname, ext) => {
             res.end();
         } else {
             console.log(ext);
-            if (ext === 'jpg' || ext === 'jpeg' || ext === 'png' || ext === 'ico' || ext === 'gif') {
-                // 缓存静态图片资源
-                res.setHeader('Cache-Control', 'public, max-age=31536000');
-            }
+            // if (ext === 'jpg' || ext === 'jpeg' || ext === 'png' || ext === 'ico' || ext === 'gif') {
+            // 缓存静态图片资源
+            res.setHeader('Cache-Control', 'public, max-age=31536000');
+            // }
             let acceptEncoding = req.headers['accept-encoding']; //取得浏览器的accept-encoding头，询问支持哪种压缩
             if (acceptEncoding && acceptEncoding.match(/\bgzip\b/)) { //浏览器支持gzip格式
                 res.setHeader('Content-Encoding', 'gzip'); //告知浏览器发送的数据是gzip压缩格式
